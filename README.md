@@ -29,3 +29,12 @@ class App extends Fre.Component {
 Fre.render(<App/>, document.body)
 
 ```
+
+API 如上
+
+目前搞定了这么多：
+1.对象劫持
+2.jsx、react-like 的组件化方案
+3.生命周期
+
+
