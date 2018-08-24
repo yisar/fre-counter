@@ -104,12 +104,9 @@ export function renderComponent(component) {
   }
 
 
-  setTimeout(() => {
-    console.log(component.base)
-    if (component.base && component.base.parentNode) {
-      component.base.parentNode.replaceChild(base, component.base)
-    }
-  }, 0)
+  if (component.base && component.base.parentNode) {
+    component.base.parentNode.replaceChild(base, component.base)
+  }
 
 
   component.base = base
