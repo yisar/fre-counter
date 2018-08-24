@@ -3,10 +3,10 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
   mode: process.env.WEBPACK_SERVE ? 'development' : 'production',
-  entry: './src/index.ts',
+  entry: './src/index.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'fre.js',
+    filename: 'main.js',
   },
   resolve: {
     extensions: [".ts", ".tsx", ".js"]
@@ -24,7 +24,7 @@ module.exports = {
               'transform-decorators-legacy',
               [
                 "transform-react-jsx", {
-                "pragma": "h"
+                "pragma": "Fre.h"
               }
               ]
             ]
