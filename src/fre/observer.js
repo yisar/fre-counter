@@ -22,15 +22,17 @@ export class Observer {
       enumerable: true,
       configurable: true,
       get() {
-        if (Dep.target) dep.add(Dep.target)
+        if (Dep.target) {
+          dep.add(Dep.target)
+        }
         return val
       },
       set(newVal) {
         if (newVal !== val) {
-          console.log('111')
           that.observe(newVal)
           val = newVal
           dep.notify()
+          dep.clean()
         }
       }
     })

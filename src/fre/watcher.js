@@ -2,10 +2,8 @@ import {Dep} from "./dep"
 import {renderComponent} from './render'
 
 export class Watcher {
-  constructor(vm, expr) {
-    console.log(expr)
+  constructor(vm) {
     this.vm = vm
-    this.expr = expr
     this.value = this.get()
     this.update = this.update.bind(this)
   }

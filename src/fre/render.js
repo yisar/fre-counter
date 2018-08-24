@@ -102,7 +102,6 @@ export function renderComponent(component) {
     component.mounted()
   }
 
-  console.log(component.base, base)
   if (component.base && component.base.parentNode) {
     component.base.parentNode.replaceChild(base, component.base)
   }

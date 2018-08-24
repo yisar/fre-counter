@@ -9,6 +9,10 @@ export class Dep {
     this.subs.push(watcher)
   }
 
+  clean() {
+    this.subs = []
+  }
+
   notify() {
     this.subs.forEach(watcher => watcher.update())
   }
