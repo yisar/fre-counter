@@ -1,4 +1,4 @@
-import {renderComponent} from './render'
+
 import {Observer} from "./observer"
 import {Watcher} from './watcher'
 
@@ -11,7 +11,6 @@ export class Component {
 
   beforeMount() {
     new Observer(this.state)
-    const vdom = new Watcher(this, this.render.bind(this), renderComponent(this))
-    vdom.update()
+    const vdom = new Watcher(this, this.render.bind(this))
   }
 }

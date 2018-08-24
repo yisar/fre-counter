@@ -1,28 +1,20 @@
 import {Dep} from "./dep"
+import {renderComponent} from './render'
 
 export class Watcher {
-  constructor(vm, expr, cb) {
+  constructor(vm, expr) {
+    console.log(expr)
+    this.vm = vm
     this.expr = expr
-    this.cb = cb
     this.value = this.get()
-
+    this.update = this.update.bind(this)
   }
 
   get() {
     Dep.target = this
-    let value = this.expr
-    Dep.target = null
-
-    return value
   }
 
   update() {
-    let value = this.get()
-    let oldValue = this.value
-    if (value !== oldValue) {
-      this.value = value
-      this.cb()
-    }
-    console.log('更新……')
+    renderComponent(this.vm)
   }
 }
