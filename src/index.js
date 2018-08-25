@@ -28,5 +28,5 @@ class App extends Fre.Component {
   }
 }
 
-Fre.render(<App/>, document.getElementById('app'))
+Fre.render(<App/>, window.app)
 

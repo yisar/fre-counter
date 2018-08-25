@@ -1,34 +1,73 @@
-export function diff(dom, vnode) {
-  let out = dom
+const ATTRS = 'ATTRS'
+const TEXT = 'TEXT'
+const REMOVE = 'REMOVE'
+const REPLACE = 'REPLACE'
 
-  if (vnode === undefined || vnode === null || typeof vnode === 'boolean') vnode = ''
 
-  if (typeof vnode === 'number') vnode = String(vnode)
+export function diff(oldTree, newTree) {
+  let patches = {}
+  let index = 0
+  walk(oldTree, newTree, index, patches)
+  return patches
+}
 
-  if (typeof vnode === 'string') {
-    if (dom && dom.nodeType === 3) {
-      if (dom.textContent !== vnode) {
-        dom.textContent = vnode
-      }
-    } else {
-      out = document.createTextNode(vnode)
-      if (dom && dom.parentNode) {
-        dom.parentNode.replaceChild(out, dom)
-      }
-    }
-    return out
-  }
-
-  if (!dom || dom.nodeName.toLowerCase() !== vnode.tag.toLowerCase()) {
-    out = document.createElement(vnode.tag)
-
-    if (dom) {
-      [...dom.childNodes].map(out.appendChild)
-      if (dom.parentNode) {
-        dom.parentNode.replaceChild(out, dom)
-      }
+function diffAttrs(oldAttrs, newAttrs) {
+  let patch = {}
+  for (let key in oldAttrs) {
+    if (oldAttrs[key] !== newAttrs[key]) {
+      patch[key] = newAttrs[key]
     }
   }
 
+  for (let key in newAttrs) {
+    if (!oldAttrs.hasOwnProperty(key)) {
+      patch[key] = newAttrs[key]
+    }
+  }
 
+  return patch
+}
+
+function walk(oldNode, newNode, index, patches) {
+  let currentPatches = []
+
+  if (!newNode) {
+    currentPatches.push({type: REMOVE, index})
+  }
+
+  if (isString(oldNode) && isString(newNode)) {
+    if (oldNode !== newNode) {
+      currentPatches.push({type: TEXT, text: newNode})
+    }
+
+  } else if (oldNode.type !== newNode.type) {
+    let attrs = diffAttrs(oldNode.props, newNode.props)
+
+    if (Object.keys(attrs).length > 0) {
+      currentPatches.push({type: ATTRS, attrs})
+    }
+
+    diffChildren(oldNode.children, newNode.children, patches)
+  } else {
+    currentPatches.push({type: REPLACE, newNode})
+  }
+
+  if (currentPatches.length > 0) {
+    patches[index] = currentPatches
+  }
+
+
+}
+
+let Index = 0
+
+function diffChildren(oldChildren, newChildren, patches) {
+  oldChildren.forEach((child, index) => {
+    walk(child, newChildren[index], ++Index, patches)
+  })
+}
+
+
+function isString(node) {
+  return Object.prototype.toString().call(node) === 'object String'
 }

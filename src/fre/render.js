@@ -1,14 +1,14 @@
+import {diff} from './diff'
+
 export function render(vnode, container) {
   return container.appendChild(_render(vnode))
 }
 
 
 function _render(vnode) {
-  if (vnode === 'undefined' || vnode === 'null' || typeof vnode === 'boolean') vnode = ''
-  if (typeof vnode.tag === 'function') {
-    const component = createComponent(vnode.tag, vnode.attrs)
-    setComponentProps(component, vnode.attrs)
-
+  if (typeof vnode.type === 'function') {
+    const component = createComponent(vnode.type, vnode.props)
+    setComponentProps(component, vnode.props)
     return component.base
   }
 
@@ -18,43 +18,45 @@ function _render(vnode) {
     return document.createTextNode(vnode)
 
   }
-  const dom = document.createElement(vnode.tag)
-  if (vnode.attrs) {
-    Object.keys(vnode.attrs).forEach(key => {
-      const value = vnode.attrs[key]
-      setAttribute(dom, key, value)
+  const node = document.createElement(vnode.type)
+  if (vnode.props) {
+    Object.keys(vnode.props).forEach(key => {
+      const value = vnode.props[key]
+      setAttribute(node, key, value)
     })
   }
   vnode.children.forEach(child => {
-    render(child, dom)
+    render(child, node)
   })
 
-  return dom
+  return vnode
 }
 
-function setAttribute(dom, name, value) {
-  if (name === 'className') name = 'class'
+export function setAttribute(node, name, value) {
   if (/on\w+/.test(name)) {
     name = name.toLowerCase()
-    dom[name] = value || ''
-  } else if (name === 'style') {
-    if (!value || typeof value === 'string') {
-      dom.style.cssText = value || ''
-    } else if (value && typeof value === 'object') {
-      for (let name in value) {
-        dom.style[name] = typeof value[name] === 'number' ? value[name] + 'px' : value[name]
-      }
-    }
+    node[name] = value
   } else {
-    if (name in dom) {
-      dom[name] = value || ''
-    }
-    if (value) {
-      dom.setAttribute(name, value)
-    } else {
-      dom.removeAttribute(name)
+    switch (name) {
+      case 'className':
+        name = 'class'
+        break
+      case 'value':
+        if (node.tagName.toUpperCase() === 'INPUT' || node.tagName.toUpperCase() === 'TEXTAREA') {
+          node.value = value
+        } else {
+          node.setAttribute(name, value)
+        }
+        break
+      case 'style':
+        node.style.cssText = value
+        break
+      default:
+        node.setAttribute(name, value)
+        break
     }
   }
+
 }
 
 function createComponent(component, props) {
@@ -79,14 +81,13 @@ function setComponentProps(component, props) {
   }
 
   component.props = props
-
   renderComponent(component)
 }
 
 export function renderComponent(component) {
 
   let base
-  const renderer = component.render()
+  const renderer = component.render() //返回了一个 vnode
 
 
   if (component.base && component.beforeUpdate) {
@@ -94,7 +95,6 @@ export function renderComponent(component) {
   }
 
   base = _render(renderer)
-
 
   if (component.base) {
     if (component.updated) component.updated()
