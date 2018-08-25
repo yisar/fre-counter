@@ -5,19 +5,24 @@ class App extends Fre.Component {
   constructor() {
     super()
     this.state = {
-      msg: "恨你！"
+      count: 0
     }
   }
 
-  handleClick() {
-    this.state.msg = this.state.msg === '恨你！' ? '爱你！' : '恨你！'
+  up() {
+    this.state.count++
+  }
+
+  down() {
+    this.state.count--
   }
 
   render() {
     return (
       <div>
-        <h1>{this.state.msg}</h1>
-        <button onClick={this.handleClick.bind(this)}>反转</button>
+        <h1>{this.state.count}</h1>
+        <button onClick={this.up.bind(this)}>+</button>
+        <button onClick={this.down.bind(this)}>-</button>
       </div>
     )
   }
