@@ -13,8 +13,8 @@ export class Dep {
     this.subs = []
   }
 
-  notify() {
-    this.subs.forEach(watcher => watcher.update())
+  notify(val, newVal) {
+    this.subs.forEach(watcher => watcher.update(val,newVal))
   }
 }
 

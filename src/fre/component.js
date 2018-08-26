@@ -5,15 +5,16 @@ export class Component {
   constructor(props = {}) {
     this.state = {}
     this.props = props
+    this.render = this.render.bind(this)
   }
 
 
   beforeMount() {
     new Observer(this.state)
-    new Watcher(this, this.render.bind(this))
+    new Watcher(this)
   }
 
-  beforeUpdate() {
-    new Watcher(this, this.render.bind(this))
+  mounted() {
+    console.log('111')
   }
 }

@@ -2,6 +2,7 @@ import {Dep} from "./dep"
 
 export class Observer {
   constructor(state) {
+    this.oldValue = {}
     this.observe(state)
   }
 

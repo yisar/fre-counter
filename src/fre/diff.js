@@ -35,7 +35,7 @@ function walk(oldNode, newNode, index, patches) {
     currentPatches.push({type: REMOVE, index})
   }
 
-  if (isString(oldNode) && isString(newNode)) {
+  if (typeof oldNode === 'string' && typeof newNode === 'string') {
     if (oldNode !== newNode) {
       currentPatches.push({type: TEXT, text: newNode})
     }
@@ -65,9 +65,4 @@ function diffChildren(oldChildren, newChildren, patches) {
   oldChildren.forEach((child, index) => {
     walk(child, newChildren[index], ++Index, patches)
   })
-}
-
-
-function isString(node) {
-  return Object.prototype.toString().call(node) === 'object String'
 }

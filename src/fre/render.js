@@ -1,15 +1,16 @@
 import {diff} from './diff'
+import {patch} from "./patch"
 
 export function render(vnode, container) {
-  return container.appendChild(_render(vnode))
+  container.appendChild(_render(vnode))
 }
 
 
 function _render(vnode) {
   if (typeof vnode.type === 'function') {
-    const component = createComponent(vnode.type, vnode.props)
+    const component = createComponent(vnode.type, vnode.props)//如果是 实例，那它返回的就是 vm.render() 后的真实 dom 的字符串
     setComponentProps(component, vnode.props)
-    return component.base
+    return _render(component.render())
   }
 
   if (typeof vnode === 'number') vnode = String(vnode)
@@ -29,7 +30,7 @@ function _render(vnode) {
     render(child, node)
   })
 
-  return vnode
+  return node
 }
 
 export function setAttribute(node, name, value) {
@@ -81,20 +82,17 @@ function setComponentProps(component, props) {
   }
 
   component.props = props
-  renderComponent(component)
+  renderComponent(component, component.render())
 }
 
 export function renderComponent(component) {
-
-  let base
-  const renderer = component.render() //返回了一个 vnode
+  const newVnode = component.render()
 
 
   if (component.base && component.beforeUpdate) {
     component.beforeUpdate()
   }
 
-  base = _render(renderer)
 
   if (component.base) {
     if (component.updated) component.updated()
@@ -103,11 +101,7 @@ export function renderComponent(component) {
   }
 
   if (component.base && component.base.parentNode) {
-    component.base.parentNode.replaceChild(base, component.base)
+    patch(component.base.parentNode, patches)
   }
-
-
-  component.base = base
-  base.component = component
 
 }

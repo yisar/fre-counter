@@ -4,8 +4,10 @@ import {renderComponent} from './render'
 export class Watcher {
   constructor(vm) {
     this.vm = vm
-    this.value = this.get()
+    this.vnode = vm.render()
+    this.get()
     this.update = this.update.bind(this)
+
   }
 
   get() {
@@ -13,6 +15,7 @@ export class Watcher {
   }
 
   update() {
-    renderComponent(this.vm)
+    console.log('111')
+    renderComponent(this.vm, this.vnode)
   }
 }
