@@ -9,7 +9,7 @@ class Counter extends Fre.Component {
   }
 
   onClick() {
-    this.setState({ num: this.state.num + 1 })
+    this.state.num++
   }
 
   render() {
