@@ -1,20 +1,16 @@
-import {Observer} from "./observer"
-import {Watcher} from './watcher'
+import { enqueueSetState } from './set-state-queue'
 
 export class Component {
   constructor(props = {}) {
+    this.isReactComponent = true
+
     this.state = {}
     this.props = props
-    this.render = this.render.bind(this)
   }
 
-
-  beforeMount() {
-    new Observer(this.state)
-    new Watcher(this)
-  }
-
-  mounted() {
-    console.log('111')
+  setState(stateChange) {
+    enqueueSetState(stateChange, this)
   }
 }
+
+export default Component
