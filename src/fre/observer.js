@@ -24,9 +24,7 @@ var Observer = (function () {
             configurable: true,
             get: function () {
                 dep.clean();
-                if (dep_1.Dep.target) {
-                    dep.add(dep_1.Dep.target);
-                }
+                dep.add(dep_1.Dep.target);
                 return val;
             },
             set: function (newVal) {

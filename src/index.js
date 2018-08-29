@@ -5,7 +5,8 @@ class App extends Fre.Component {
     super(props)
     this.state = {
       count: 1,
-      sex: 'boy'
+      sex: 'boy',
+      msg: ''
     }
   }
 
@@ -21,13 +22,23 @@ class App extends Fre.Component {
     this.state.count--
   }
 
+  handleChange(v) {
+    this.state.msg = v
+  }
+
   render() {
     return (
       <div>
         <h1>{this.state.sex}</h1>
         <h1>{this.state.count}</h1>
+        <div>
+          <h1>{this.state.msg}</h1>
+        </div>
         <button onClick={() => this.change()}>变性</button>
         <button onClick={() => this.up()}>+</button>
+        <input type="text" onChange={e => {
+          this.handleChange(e.target.value)
+        }}/>
       </div>
     )
   }

@@ -26,9 +26,9 @@ export class Observer {
             configurable: true,
             get() {
                 dep.clean()
-                if (Dep.target) {
-                    dep.add(Dep.target)
-                }
+
+                dep.add(Dep.target)
+
                 return val
             },
             set(newVal) {
