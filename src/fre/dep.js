@@ -1,21 +1,22 @@
-export class Dep {
-  constructor() {
-    this.subs = []
-    this.add = this.add.bind(this)
-    this.notify = this.notify.bind(this)
-  }
-
-  add(watcher) {
-    this.subs.push(watcher)
-  }
-
-  clean() {
-    this.subs = []
-  }
-
-  notify(val, newVal) {
-    this.subs.forEach(watcher => watcher.update(val,newVal))
-  }
-}
-
-Dep.target = null
+"use strict";
+exports.__esModule = true;
+var Dep = (function () {
+    function Dep() {
+        this.subs = [];
+        this.add = this.add.bind(this);
+        this.notify = this.notify.bind(this);
+    }
+    Dep.prototype.add = function (watcher) {
+        this.subs.push(watcher);
+    };
+    Dep.prototype.clean = function () {
+        this.subs = [];
+    };
+    Dep.prototype.notify = function () {
+        this.subs.forEach(function (watcher) { return watcher.update(); });
+    };
+    return Dep;
+}());
+exports.Dep = Dep;
+Dep.target = null;
+//# sourceMappingURL=dep.js.map

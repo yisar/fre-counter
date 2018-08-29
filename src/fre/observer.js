@@ -1,41 +1,44 @@
-import {Dep} from "./dep"
-
-export class Observer {
-  constructor(state) {
-    this.oldValue = {}
-    this.observe(state)
-  }
-
-  observe(state) {
-    if (!state || typeof state !== 'object') {
-      return
+"use strict";
+exports.__esModule = true;
+var dep_1 = require("./dep");
+var Observer = (function () {
+    function Observer(state) {
+        this.state = new Proxy(state, {});
+        this.observe(this.state);
     }
-    Object.keys(state).forEach(key => {
-      this.defineReactive(state, key, state[key])
-      this.observe(state[key])
-    })
-  }
-
-  defineReactive(obj, key, val) {
-    let that = this
-    let dep = new Dep()
-    Object.defineProperty(obj, key, {
-      enumerable: true,
-      configurable: true,
-      get() {
-        if (Dep.target) {
-          dep.add(Dep.target)
+    Observer.prototype.observe = function (state) {
+        var _this = this;
+        if (!state || typeof state !== 'object') {
+            return;
         }
-        return val
-      },
-      set(newVal) {
-        if (newVal !== val) {
-          that.observe(newVal)
-          val = newVal
-          dep.notify()
-          dep.clean()
-        }
-      }
-    })
-  }
-}
+        Object.keys(state).forEach(function (key) {
+            _this.defineReactive(state, key, state[key]);
+            _this.observe(state[key]);
+        });
+    };
+    Observer.prototype.defineReactive = function (obj, key, val) {
+        var that = this;
+        var dep = new dep_1.Dep();
+        Object.defineProperty(obj, key, {
+            enumerable: true,
+            configurable: true,
+            get: function () {
+                dep.clean();
+                if (dep_1.Dep.target) {
+                    dep.add(dep_1.Dep.target);
+                }
+                return val;
+            },
+            set: function (newVal) {
+                if (newVal !== val) {
+                    that.observe(newVal);
+                    val = newVal;
+                    dep.notify();
+                }
+            }
+        });
+    };
+    return Observer;
+}());
+exports.Observer = Observer;
+//# sourceMappingURL=observer.js.map

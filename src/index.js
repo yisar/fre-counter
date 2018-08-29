@@ -1,25 +1,36 @@
 import Fre from './fre/fre'
 
-class Counter extends Fre.Component {
+class App extends Fre.Component {
   constructor(props) {
     super(props)
     this.state = {
-      num: 1
+      count: 1,
+      sex: 'boy'
     }
   }
 
-  onClick() {
-    this.state.num++
+  up() {
+    this.state.count++
+  }
+
+  change() {
+    this.state.sex === 'boy' ? this.state.sex = 'girl' : this.state.sex = 'boy'
+  }
+
+  down() {
+    this.state.count--
   }
 
   render() {
     return (
       <div>
-        <h1>count: {this.state.num}</h1>
-        <button onClick={() => this.onClick()}>add</button>
+        <h1>{this.state.sex}</h1>
+        <h1>{this.state.count}</h1>
+        <button onClick={() => this.change()}>变性</button>
+        <button onClick={() => this.up()}>+</button>
       </div>
     )
   }
 }
 
-Fre.render(<Counter />, document.getElementById('root'))
+Fre.render(<App/>, document.body)

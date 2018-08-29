@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "sourceMap": true,
-    "removeComments": true
+    "removeComments": true,
+    "lib": ["es5", "es6", "dom"]
   }
 }
